@@ -1,0 +1,161 @@
+{
+    "name"       : "coremetrics",
+    "displayName": "CoreMetrics",
+    "description": "An static analyzer for .NET Core.",
+    "publisher"  : "Jasper Koning",
+    "author"     : "Jasper Koning",
+    "version"    : "0.0.1",
+    "engines"    : {
+        "vscode": "^1.28.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onView:coreMetrics"
+    ],
+    "main"       : "./out/extension",
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id"   : "metrics-explorer",
+                    "title": "Metrics",
+                    "icon" : "media/dashboard.svg"
+                }
+            ]
+        },
+        "views": {
+            "metrics-explorer": [
+                {
+                    "id"  : "coreMetrics",
+                    "name": "Core Metrics"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "coreMetrics.rebuild",
+                    "when"   : "view == coreMetrics",
+                    "group"  : "navigation"
+                },
+                {
+                    "command": "coreMetrics.refresh",
+                    "when"   : "view == coreMetrics",
+                    "group"  : "navigation"
+                },
+                {
+                    "command": "coreMetrics.export",
+                    "when"   : "view == coreMetrics",
+                    "group"  : "navigation"
+                },
+                {
+                    "command": "coreMetrics.expandAll",
+                    "when"   : "view == coreMetrics",
+                    "group"  : "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "coreMetrics.openFile",
+                    "when"   : "viewItem == method"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "coreMetrics.rebuild",
+                "title"  : "Rebuild Metrics",
+                "icon"   : {
+                    "light": "resources/light/zap.svg",
+                    "dark" : "resources/dark/zap.svg"
+                }
+            },
+            {
+                "command": "coreMetrics.refresh",
+                "title"  : "Refresh Metrics",
+                "icon"   : {
+                    "light": "resources/light/refresh.svg",
+                    "dark" : "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "coreMetrics.export",
+                "title"  : "Create Metrics Report",
+                "icon"   : {
+                    "light": "resources/light/export.svg",
+                    "dark" : "resources/dark/export.svg"
+                }
+            },
+            {
+                "command": "coreMetrics.expandAll",
+                "title"  : "Expand all methods",
+                "icon"   : {
+                    "light": "resources/light/close-all.svg",
+                    "dark" : "resources/dark/close-all.svg"
+                }
+            },
+            {
+                "command": "coreMetrics.openFile",
+                "title"  : "Open File"
+            }
+        ],
+        "configuration": {
+            "title"     : "Core Metrics Configuration",
+            "properties": {
+                "coreMetrics.excludedFolders": {
+                    "type"   : "array",
+                    "default": [
+                        "Migrations"
+                    ],
+                    "description": "Folders to exclude from metrics."
+                },
+                "coreMetrics.maintainabilityIndex": {
+                    "type"       : "number",
+                    "default"    : 50,
+                    "description": "Minimum requirement of maintainability. Based on Halstead volume, class coupling. Between 0 and 100, 100 being the best possible score."
+                },
+                "coreMetrics.cyclomaticComplexity": {
+                    "type"       : "number",
+                    "default"    : 10,
+                    "description": "Maximum cyclomatic complexity, cyclomatic complexity indicates the number of possible branches in the control flow (if, switch/case, for- and while-loop statements."
+                },
+                "coreMetrics.linesOfCode": {
+                    "type"       : "number",
+                    "default"    : 20,
+                    "description": "Maximum lines of code in a method."
+                },
+                "coreMetrics.classCoupling": {
+                    "type"       : "number",
+                    "default"    : 32,
+                    "description": "Maximum (external) classed coupled in this method."
+                },
+                "coreMetrics.depthOfInheritance": {
+                    "type"       : "number",
+                    "default"    : 6,
+                    "description": "Maximum (external) depth of inheritance."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile"          : "tsc -p ./",
+        "watch"            : "tsc -watch -p ./",
+        "postinstall"      : "node ./node_modules/vscode/bin/install",
+        "test"             : "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript"  : "^2.6.1",
+        "vscode"      : "^1.1.21",
+        "tslint"      : "^5.8.0",
+        "@types/node" : "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "json2csv"    : "^4.3.0",
+        "xml2js"      : "^0.4.19",
+        "xml2js-xpath": "^0.9.0"
+    }
+}
